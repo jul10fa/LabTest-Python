@@ -1,32 +1,40 @@
 
 students = [
-    [201, "Amina", [78, 85, 90]],
-    [202, "Rahim", [65, 70, 68]],
-    [203, "Nadia", [92, 88, 95]],
-    [204, "Hasan", [55, 60, 65]],
-    [205, "Tania", [80, 80, 80]]
+    [301, "Sakib", [75, 82, 88]],
+    [302, "Mim", [60, 72, 69]],
+    [303, "Arif", [90, 85, 93]],
+    [304, "Nusrat", [50, 58, 62]],
+    [305, "Fahim", [80, 85, 78]]
 ]
 
 
 # Task 1: Calculate Average
 def calculate_average(marks):
-    if not marks:
+
+    if len(marks) == 0:
         return None
 
-    return sum(marks) / len(marks)
+    total = sum(marks)
+    average = total / len(marks)
+
+    return average
 
 
 # Task 2: Classify Performance
 def classify_performance(average):
 
-    if average is None:
+    if average == None:
         return "No Marks"
+
     elif average >= 80:
         return "Excellent"
+
     elif average >= 70:
         return "Good"
+
     elif average >= 60:
         return "Satisfactory"
+
     else:
         return "Needs Improvement"
 
@@ -36,37 +44,52 @@ def display_report(students):
 
     print("STUDENT MARKS REPORT")
     print("-" * 65)
+
     print(f"{'ID':<10}{'Name':<12}{'Average':<15}{'Performance'}")
+
     print("-" * 65)
 
     for student in students:
 
-        # Check missing or invalid data
+        # Check student information
         if len(student) != 3:
             print("Invalid student record!")
             continue
 
-        student_id, name, marks = student
+        sid = student[0]
+        name = student[1]
+        marks = student[2]
 
-        if not student_id or not name:
+        # Check ID and name
+        if sid == None or name == "":
             print("Missing student ID or name!")
             continue
 
-        if not isinstance(marks, list) or len(marks) == 0:
-            print(f"{name}: No marks available")
+        # Check marks availability
+        if type(marks) != list or len(marks) == 0:
+            print(name, ": No marks available")
             continue
 
-        if not all(
-            isinstance(m, (int, float)) and not isinstance(m, bool)
-            and 0 <= m <= 100 for m in marks
-        ):
-            print(f"{name}: Invalid marks!")
+        # Check valid marks
+        valid = True
+
+        for mark in marks:
+            if (not isinstance(mark, (int, float))
+                or isinstance(mark, bool)
+                or mark < 0 or mark > 100):
+
+                valid = False
+                break
+
+        if valid == False:
+            print(name, ": Invalid marks!")
             continue
 
-        average = calculate_average(marks)
-        performance = classify_performance(average)
+        # Calculate average and performance
+        avg = calculate_average(marks)
+        result = classify_performance(avg)
 
-        print(f"{student_id:<10}{name:<12}{average:<15.2f}{performance}")
+        print(f"{sid:<10}{name:<12}{avg:<15.2f}{result}")
 
     print("-" * 65)
 
